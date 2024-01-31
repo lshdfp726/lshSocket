@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "inet.h": "c",
+        "in.h": "c",
+        "cstring": "c",
+        "lshsocket.h": "c",
+        "netdb.h": "c",
+        "__config": "c",
+        "fstream": "c",
+        "locale": "c",
+        "stdio.h": "c",
+        "libc.h": "c",
+        "unistd.h": "c",
+        "_types.h": "c",
+        "stat.h": "c",
+        "socket.h": "c",
+        "cstdlib": "c",
+        "string.h": "c"
+    }
+}
