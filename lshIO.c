@@ -10,7 +10,7 @@ ssize_t lsh_readn(int fd, void *buf, size_t n) {
     size_t nleft = n;
     ssize_t nread;
     char *bufp = (char *)buf;
-
+    printf("start lsh_readn\n");
     while (nleft > 0)
     {
         if ((nread = read(fd, buf, nleft)) < 0) 
@@ -33,7 +33,7 @@ ssize_t lsh_writen(int fd, void *buf, size_t n) {
     size_t nleft = n;
     ssize_t nwritten;
     char *bufp = (char *)buf;
-
+    printf("start lsh_writen\n");
     while (nleft > 0)
     {
         if ((nwritten = write(fd, bufp, nleft)) <= 0) 
@@ -52,6 +52,7 @@ ssize_t lsh_writen(int fd, void *buf, size_t n) {
 
 void lshRio_readinitb(lshRio_t *rp, int fd) 
 {
+    printf("start lshRio_readinitb\n");
     rp->rio_fd = fd;
     rp->rio_cnt = 0;
     rp->rio_bufptr = rp->rio_buf;
@@ -61,6 +62,7 @@ ssize_t lshc_readline(lshRio_t *rp, void *buf, size_t maxlen)
 {
     int n, rc;
     char c, *bufp = buf;
+    printf("start lshc_readline\n");
     for (n = 1; n < maxlen; n++)
     {
         if ((rc = lshRio_read(rp, &c, 1)) == 1) 
@@ -87,7 +89,7 @@ ssize_t lshc_read(lshRio_t *rp, void *buf, size_t n)
     size_t nleft = n;
     ssize_t nread;
     char *bufp = buf;
-
+    printf("start lshc_read\n");
     while (nleft > 0)
     {
         if ((nread = lshRio_read(rp, bufp, nleft)) < 0) 
@@ -105,6 +107,7 @@ ssize_t lshc_read(lshRio_t *rp, void *buf, size_t n)
 static ssize_t lshRio_read(lshRio_t *rp, char *buf, size_t n) 
 {
     int cnt;
+    // printf("start lshRio_read\n");
     while (rp ->rio_cnt <= 0)
     {
         rp ->rio_cnt = read(rp->rio_fd, rp->rio_buf, sizeof(rp->rio_buf));
@@ -134,7 +137,7 @@ static ssize_t lshRio_read(lshRio_t *rp, char *buf, size_t n)
 int fstatcheck(int fd, struct stat *buf) {
     fstat(fd, buf);
     char *type, *readok;
-
+    printf("start fstatcheck\n");
     if (S_ISREG(buf->st_mode))
         type = "regular";
     else if (S_ISDIR(buf->st_mode))

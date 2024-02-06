@@ -49,16 +49,14 @@ void echo(int connfd) {
 
     while ((n = lshc_readline(&rio, buf, MAXBUF)) != 0)
     {
+        char b[MAXBUF];
         printf("server received %d bytes, buffer is %s\n",(int)n, buf);
-        char *temp = "server:";
-        int len = strlen(temp);
-        char *tail = "\n";
-        int tailLen = strlen(tail);
-        char b[n + len + tailLen];
-        memmove(b, temp, len);
-        memmove(b + len, buf, n);
-        memmove(b + len + n, tail, tailLen);
-        printf("server send len is  %zu, buffer is %s\n",n + len + tailLen, b);
-        lsh_writen(connfd, b, n + len + tailLen);
+        sprintf(b, "server: %s", buf);
+        lsh_writen(connfd, b, strlen(b));
+        if (strstr(buf, "\\r\\n")) { //为了判断数据边界，跳出while循环。
+            char end[] = "\r\n";
+            lsh_writen(connfd, end, strlen(end));//向客户端发送一个结束标识
+            break;
+        }
     }
 }
