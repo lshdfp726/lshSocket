@@ -1,8 +1,9 @@
+#ifndef LSHIO_H
+#define LSHIO_H
+
 #include <unistd.h>
 #include <sys/stat.h>
 
-#ifndef LSHIO_H
-#define LSHIO_H
 
 #define RIO_BUFSIZE 8192
 
@@ -56,4 +57,28 @@ ssize_t lshc_readline(lshRio_t *rp, void *buf, size_t maxlen);
 ssize_t lshc_read(lshRio_t *rp, void *buf, size_t n);
 
 int fstatcheck(int fd, struct stat *buf);
+
+/**
+ * @brief 
+ * 多线程安全的输入字符串到标准输出
+ * 
+ * @param s 输入的字符串
+ * @return ssize_t 返回输入的字节
+ */
+ssize_t lshSio_puts(char s[]);
+
+/**
+ * @brief 
+ * 多线程安全的输入long 数值 串到标准输出
+ * @param v 输入的整型
+ * @return ssize_t 返回输入的字节
+ */
+ssize_t lshSio_putl(long v);
+
+/**
+ * @brief 
+ * 多线程安全的输入错误信息到标准输出，然后_exit(1)
+ * @param s 输入的字符串
+ */
+void lshSio_error(char s[]);
 #endif

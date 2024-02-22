@@ -6,6 +6,7 @@
 
 #include "lshSocket.h"
 #include "lshIO.h"
+int writable_fd(int fd);
 
 int main(int argc, char const *argv[]) 
 {
@@ -25,7 +26,9 @@ int main(int argc, char const *argv[])
     fprintf(stdout, "你将给主机: %s, 端口%s 发送消息, 你发送的内容是%s\n", host, port, buf);
     clientfd = lsh_openClientfd(host, port);
     //while 循环 标准输入一直读
-    while (fgets(buf, MAXBUF, stdin) != NULL) 
+    int fd = open("test.txt", O_RDONLY, 0);
+    while (lsh_readn(fd, buf, MAXBUF))
+    // while (fgets(buf, MAXBUF, stdin) != NULL) 
     {
         lshRio_readinitb(&rio, clientfd);
         //写给socket 文件描述符，这里是服务端
@@ -38,6 +41,9 @@ int main(int argc, char const *argv[])
         if (strstr(receiveBuf, "\\r\\n")) {
             //关闭，
             close(clientfd);
+            if (writable_fd(clientfd) < 0) {
+                printf("can not write");
+            }
             printf("close old clientfd: %d\n",clientfd);
             //重新连接
             clientfd = lsh_openClientfd(host, port);
@@ -48,4 +54,15 @@ int main(int argc, char const *argv[])
     }
 
     return 0;
+}
+
+int writable_fd(int fd) {
+    fd_set write_fds;
+    struct timeval timeout;
+    FD_ZERO(&write_fds);
+    FD_SET(fd, &write_fds);
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 0;
+    int ret = select(fd + 1, NULL, &write_fds, NULL, &timeout);
+    return ret;
 }
