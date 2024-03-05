@@ -42,7 +42,7 @@ void lshRio_readinitb(lshRio_t *rp, int fd);
  * @param rp 缓存结构体
  * @param buf IO读操作写入的内存
  * @param maxlen 读一行循环操作的最大次数
- * @return ssize_t 返回
+ * @return ssize_t 返回实际读了多少个字节数据
  */
 ssize_t lshc_readline(lshRio_t *rp, void *buf, size_t maxlen);
 
@@ -81,4 +81,11 @@ ssize_t lshSio_putl(long v);
  * @param s 输入的字符串
  */
 void lshSio_error(char s[]);
+
+/**
+ * @brief 
+ * 打印完错误就exit(0);
+ * @param msg 和strerror 一起打印的自定义字符串
+ */
+void lshUnix_error(char *msg);
 #endif
