@@ -4,8 +4,8 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-
-#define RIO_BUFSIZE 8192
+//在函数栈里面开辟内存一定要注意别把栈帧撑爆了导致段错误
+#define RIO_BUFSIZE (1024 * 8)
 
 typedef struct {
     int rio_fd;  //文件句柄
