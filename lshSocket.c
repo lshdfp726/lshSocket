@@ -105,7 +105,9 @@ int lsh_openListenfd(char *port) {
     getaddrinfo(NULL, port, &hints, &listp);
 
     for (p = listp; p; p = p->ai_next)
-    {
+    {   
+        //server  89196 fu-mobile    3u  systm 0x30f188c7b8953b95       0t0           [ctl com.apple.netsrc id 6 unit 33]
+        //系统在调用socket 接口时内部会先创建一个文件描述符，所以 listenfd 值当前系统已经打开的文件描述符 + 2,而不是+1
         if ((listenfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) < 0) 
             continue;
         
