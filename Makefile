@@ -1,44 +1,37 @@
-
-mode = 0
-
-ifdef MODE
-mode = $(MODE)
-endif
-
 CC = clang
-CFLAGS = -Wall -O2 -m64 -g -O0
+CFLAGS = -Wall -m64 -g -O0
 
-#静态库名称
-LIBRARY = liblsh.a
+# 指定静态库.a文件路径
+# LIBRARY = ./ClientLib/liblshClient.a
+LIBRARY = ./ServiceLib/liblshService.a
 
-#所有源文件
-SRCS = lshIO.c lshSocket.c
+# 指定头文件搜索路径为 lib目录
+# INCLUDE_PATH = -I./ClientLib
+INCLUDE_PATH = -I./ServiceLib
 
-#打lshIO 和lshSocket 静态库包
-OBJS = $(SRCS:.c=.o)
+# 源文件目录
+SRCDIR = ./
 
-# 编译可执行文件
-OBJSCLIENT = client.o lshSocket.o lshIO.o
+# 所有源文件
+SRCS = $(wildcard $(SRCDIR)/*.c)
 
-OBJSSERVER = server.o lshSocket.o lshIO.o
+OBJS = $(SRCS:%.c=%.o)
 
-ifeq ($(mode), 0)
-$(LIBRARY): $(OBJS)
-	ar rcs $@ $(OBJS)
+EXEC = main
 
-else ifeq ($(mode), 1)
-client: $(OBJSCLIENT)
-	$(CC) $(CFLAGS) -o client $(OBJSCLIENT)
-else
-server: $(OBJSSERVER)
-	$(CC) $(CFLAGS) -o server $(OBJSSERVER)
-endif
+# 生成可执行文件
+all: $(EXEC)
 
-client.o: client.c lshSocket.h lshIO.h
+# $^ 展开所有的.o 文件列表 $@表示所有目标文件路径即 $(EXEC)
+$(EXEC): $(OBJS) $(LIBRARY)
+	$(CC) $(CFLAGS) $^ -o $@ -L./ServiceLib -llshService
 
-server.o: server.c lshSocket.h lshIO.h
+# /%.o 是规则目标， $(SRCS)/%.c 规则的前提或者依赖  $(CC) $(CFLAGS)指定编译器和编译选项
+# -c 表示告诉编译器生产对象文件，但不进行链接，编译阶段使用
+# $< 表示编译的源文件路径即 $(SRCDIR)
+# $@ 表示生产的.o文件路径即
+%.o: $(SRCDIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE_PATH)
 
-lshSocket.o: lshSocket.c lshSocket.h 
-
-clean: 
-	rm -rf *.o *.a
+clean:
+	rm -rf *.o $(EXEC)

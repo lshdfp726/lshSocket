@@ -5,11 +5,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(lldb) 启动",
+            "name": "service 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/server",
+            "program": "${workspaceFolder}/main",
             "args": ["8888"],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb"
+        },
+        {
+            "name": "main 启动",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/main",
+            "args": ["localhost","8888"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

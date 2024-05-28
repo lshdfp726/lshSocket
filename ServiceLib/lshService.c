@@ -10,8 +10,7 @@
 
 void echo(int connfd);
 
-int main(int argc, char const *argv[]) 
-{
+int startService(int argc, char const *argv[]) {
     int listenfd, connfd;
     socklen_t clientlen;
     struct sockaddr_storage clientaddr; //sockadd_in 存储IPV4地址，sockaddr_storage 可以存储任何地址。服务端面对的不止IPV4

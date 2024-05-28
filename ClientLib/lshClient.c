@@ -8,20 +8,19 @@
 #include "lshIO.h"
 int writable_fd(int fd);
 
-int main(int argc, char const *argv[]) 
-{
+int startClient(int argc, char const *argv[]) {
     int clientfd;
     char *host, *port, buf[MAXBUF], receiveBuf[MAXBUF];
     lshRio_t rio;
 
-    if (argc != 3) 
+    if (argc != 3)
     {
         fprintf(stderr, "usage: %s <host> <port>\n", argv[0]);
         exit(0);
     }
     host = (char *)argv[1];
     port = (char *)argv[2];
-    
+
     fprintf(stdout, "请输入发送的内容\n");
     fprintf(stdout, "你将给主机: %s, 端口%s 发送消息, 你发送的内容是%s\n", host, port, buf);
     clientfd = lsh_openClientfd(host, port);
